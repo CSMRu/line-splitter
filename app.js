@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const endPos = startPos + lines[lineIndex].length;
 
             // Select the line
-            textInput.focus();
+            textInput.focus({ preventScroll: true });
             textInput.setSelectionRange(startPos, endPos);
         }
     });
