@@ -14,6 +14,9 @@
     --line-numbers-text: #4b5563;
     --chunk-content-bg: rgba(0, 0, 0, 0.3);
     --chunk-content-bg-scroll: rgba(0, 0, 0, 0.4);
+    --panel-bg: rgba(24, 27, 33, 0.5);
+    --panel-header-bg: rgba(24, 27, 33, 0.8);
+    --panel-header-text: #9ca3af;
     --drop-overlay-bg: rgba(15, 17, 21, 0.9);
 
     /* Common */
@@ -40,6 +43,9 @@ body.light-theme {
     --chunk-content-bg: rgba(0, 0, 0, 0.05);
     --chunk-content-bg-scroll: rgba(0, 0, 0, 0.08);
     --drop-overlay-bg: rgba(248, 249, 250, 0.95);
+    --panel-bg: rgba(255, 255, 255, 0.8);
+    --panel-header-bg: rgba(241, 243, 245, 0.95);
+    --panel-header-text: #1f2937;
 }
 
 * {
@@ -142,7 +148,7 @@ body.light-theme .theme-toggle .moon-icon {
 
 .panel {
     flex: 1;
-    background: rgba(24, 27, 33, 0.5);
+    background: var(--panel-bg);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
     display: flex;
@@ -157,7 +163,7 @@ body.light-theme .theme-toggle .moon-icon {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(24, 27, 33, 0.8);
+    background: var(--panel-header-bg);
     flex-shrink: 0;
     border-top-left-radius: var(--radius-lg);
     border-top-right-radius: var(--radius-lg);
@@ -166,7 +172,7 @@ body.light-theme .theme-toggle .moon-icon {
 .panel-header h2 {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--text-muted);
+    color: var(--panel-header-text);
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
