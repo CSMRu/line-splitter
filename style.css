@@ -251,12 +251,12 @@ textarea {
     overflow-y: auto;
     white-space: pre;
 
-    /* Zebra Striping */
+    /* Zebra Striping - calculated: 0.95rem * 1.6 = 1.52rem per line */
     background-image: repeating-linear-gradient(to bottom,
             transparent,
-            transparent 1.6em,
-            rgba(255, 255, 255, 0.03) 1.6em,
-            rgba(255, 255, 255, 0.03) 3.2em);
+            transparent 1.52rem,
+            rgba(255, 255, 255, 0.03) 1.52rem,
+            rgba(255, 255, 255, 0.03) 3.04rem);
     background-attachment: local;
 }
 
