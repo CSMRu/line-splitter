@@ -50,6 +50,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // Call it immediately after DOM is ready
     setActualLineHeight();
 
+    // Theme Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+
+    // Apply saved theme on load
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+    }
+
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('light-theme');
+        const currentTheme = document.body.classList.contains('light-theme') ? 'light' : 'dark';
+        localStorage.setItem('theme', currentTheme);
+    });
+
     // Layout Toggle
     layoutToggleBtn.addEventListener('click', () => {
         splitView.classList.toggle('expanded');

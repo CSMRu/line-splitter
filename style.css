@@ -1,4 +1,5 @@
 :root {
+    /* Dark Theme (Default) */
     --bg-color: #0f1115;
     --card-bg: #181b21;
     --card-hover: #1f232b;
@@ -8,11 +9,37 @@
     --text-muted: #9ca3af;
     --border-color: #2d313a;
     --glass-border: rgba(255, 255, 255, 0.08);
+    --zebra-stripe: rgba(255, 255, 255, 0.03);
+    --line-numbers-bg: rgba(0, 0, 0, 0.2);
+    --line-numbers-text: #4b5563;
+    --chunk-content-bg: rgba(0, 0, 0, 0.3);
+    --chunk-content-bg-scroll: rgba(0, 0, 0, 0.4);
+    --drop-overlay-bg: rgba(15, 17, 21, 0.9);
+
+    /* Common */
     --radius-lg: 16px;
     --radius-md: 8px;
     --font-sans: 'Inter', 'Noto Sans KR', 'Malgun Gothic', 'Meiryo', sans-serif;
     --header-height: 80px;
     --line-height: 1.6;
+}
+
+body.light-theme {
+    --bg-color: #f8f9fa;
+    --card-bg: #ffffff;
+    --card-hover: #f1f3f5;
+    --primary: #f59e0b;
+    --primary-hover: #fbbf24;
+    --text-main: #1f2937;
+    --text-muted: #6b7280;
+    --border-color: #e5e7eb;
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --zebra-stripe: rgba(0, 0, 0, 0.03);
+    --line-numbers-bg: rgba(0, 0, 0, 0.05);
+    --line-numbers-text: #9ca3af;
+    --chunk-content-bg: rgba(0, 0, 0, 0.05);
+    --chunk-content-bg-scroll: rgba(0, 0, 0, 0.08);
+    --drop-overlay-bg: rgba(248, 249, 250, 0.95);
 }
 
 * {
@@ -56,6 +83,53 @@ h1 {
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    margin-left: auto;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: var(--text-muted);
+}
+
+.theme-toggle:hover {
+    background: var(--card-hover);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.theme-toggle svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle .sun-icon {
+    display: none;
+}
+
+.theme-toggle .moon-icon {
+    display: block;
+}
+
+body.light-theme .theme-toggle .sun-icon {
+    display: block;
+}
+
+body.light-theme .theme-toggle .moon-icon {
+    display: none;
+}
+
+.theme-toggle:hover svg {
+    transform: rotate(15deg);
 }
 
 /* Split View Layout */
@@ -222,9 +296,9 @@ h1 {
 .line-numbers {
     width: 50px;
     flex-shrink: 0;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--line-numbers-bg);
     border-right: 1px solid var(--border-color);
-    color: #4b5563;
+    color: var(--line-numbers-text);
     font-family: monospace;
     font-size: 0.95rem;
     text-align: right;
@@ -257,8 +331,8 @@ textarea {
     background-image: repeating-linear-gradient(to bottom,
             transparent,
             transparent var(--actual-line-height),
-            rgba(255, 255, 255, 0.03) var(--actual-line-height),
-            rgba(255, 255, 255, 0.03) calc(var(--actual-line-height) * 2));
+            var(--zebra-stripe) var(--actual-line-height),
+            var(--zebra-stripe) calc(var(--actual-line-height) * 2));
     background-attachment: local;
 }
 
@@ -273,7 +347,7 @@ textarea {
     align-items: center;
     justify-content: center;
     color: var(--primary);
-    background: rgba(15, 17, 21, 0.9);
+    background: var(--drop-overlay-bg);
     z-index: 20;
     opacity: 0;
     pointer-events: none;
@@ -333,7 +407,7 @@ textarea {
 }
 
 .chunk-content {
-    background: rgba(0, 0, 0, 0.3);
+    background: var(--chunk-content-bg);
     border-radius: 4px;
     padding: 0.75rem;
     font-family: monospace;
@@ -350,7 +424,7 @@ textarea {
 
 .chunk-content.scroll-enabled {
     overflow-y: auto;
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--chunk-content-bg-scroll);
     cursor: text;
 }
 
