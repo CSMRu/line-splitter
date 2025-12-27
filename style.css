@@ -69,6 +69,7 @@ body {
     display: flex;
     flex-direction: column;
     padding: 0 1.5rem 1.5rem 1.5rem;
+    min-width: 1200px;
 }
 
 /* Header */
@@ -522,25 +523,5 @@ textarea {
     to {
         opacity: 1;
         transform: translate(-50%, 0);
-    }
-}
-
-@media (max-width: 800px) {
-    .split-view {
-        flex-direction: column;
-    }
-
-    body {
-        height: auto;
-        overflow: auto;
-    }
-
-    .app-container {
-        height: auto;
-        padding-bottom: 3rem;
-    }
-
-    .panel {
-        height: 500px;
     }
 }
