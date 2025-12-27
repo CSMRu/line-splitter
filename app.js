@@ -18,6 +18,38 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentChunks = [];
     let debounceTimer;
 
+    // Fix zebra striping alignment by measuring actual rendered line-height
+    const setActualLineHeight = () => {
+        // Create a temporary element to measure the actual rendered line height
+        const tempDiv = document.createElement('div');
+        tempDiv.style.cssText = `
+            position: absolute;
+            visibility: hidden;
+            font-family: monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            white-space: pre;
+        `;
+        tempDiv.textContent = 'X\nX';
+        document.body.appendChild(tempDiv);
+
+        // Use getBoundingClientRect for precise sub-pixel measurement
+        const rect = tempDiv.getBoundingClientRect();
+        const height = rect.height;
+        document.body.removeChild(tempDiv);
+
+        // Calculate single line height
+        const actualLineHeight = height / 2;
+
+        // Set as CSS variable on the textarea
+        textInput.style.setProperty('--actual-line-height', `${actualLineHeight}px`);
+
+        console.log(`Zebra stripe line-height set to: ${actualLineHeight}px (precise)`);
+    };
+
+    // Call it immediately after DOM is ready
+    setActualLineHeight();
+
     // Layout Toggle
     layoutToggleBtn.addEventListener('click', () => {
         splitView.classList.toggle('expanded');

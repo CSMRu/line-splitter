@@ -251,12 +251,14 @@ textarea {
     overflow-y: auto;
     white-space: pre;
 
-    /* Zebra Striping - calculated: 0.95rem * 1.6 = 1.52rem per line */
+    /* Zebra Striping - uses dynamically measured line-height for pixel-perfect alignment */
+    --actual-line-height: 24.32px;
+    /* fallback, will be overridden by JS */
     background-image: repeating-linear-gradient(to bottom,
             transparent,
-            transparent 1.52rem,
-            rgba(255, 255, 255, 0.03) 1.52rem,
-            rgba(255, 255, 255, 0.03) 3.04rem);
+            transparent var(--actual-line-height),
+            rgba(255, 255, 255, 0.03) var(--actual-line-height),
+            rgba(255, 255, 255, 0.03) calc(var(--actual-line-height) * 2));
     background-attachment: local;
 }
 
