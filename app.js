@@ -328,6 +328,9 @@ document.addEventListener('DOMContentLoaded', () => {
             await navigator.clipboard.writeText(text);
             showToast('Copied to clipboard!');
 
+            // Auto-scroll to bottom
+            window.scrollToChunkBottom(index);
+
             // Handle Badge
             let badge = btn.querySelector('.notification-badge');
             if (!badge) {
