@@ -41,8 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Calculate single line height
         const actualLineHeight = height / 2;
 
-        // Set as CSS variable on the textarea
-        textInput.style.setProperty('--actual-line-height', `${actualLineHeight}px`);
+        // Set as CSS variable on root so all components can use it
+        document.documentElement.style.setProperty('--actual-line-height', `${actualLineHeight}px`);
 
         console.log(`Zebra stripe line-height set to: ${actualLineHeight}px (precise)`);
     };
@@ -268,41 +268,71 @@ document.addEventListener('DOMContentLoaded', () => {
             card.innerHTML = `
                 <div class="chunk-header">
                     <span>Split part ${chunk.id}</span>
-                    <span style="font-size: 0.75rem; opacity: 0.7;">Lines ${chunk.lineStart}-${chunk.lineEnd}</span>
+                    <div class="chunk-actions">
+                        <button class="btn-icon" onclick="scrollToChunkTop(${index})" title="Go to Start">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon-sm">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                            </svg>
+                        </button>
+                        <button class="btn-icon" onclick="scrollToChunkBottom(${index})" title="Go to End">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon-sm">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </button>
+                        <div style="width: 1px; height: 20px; background: var(--border-color); margin: 0 0.5rem;"></div>
+                        <button class="btn-icon" onclick="copyChunk(${index}, this)" title="Copy to Clipboard">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon-sm">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
+                            </svg>
+                        </button>
+                        <button class="btn-icon" onclick="downloadChunk(${index})" title="Download .txt">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon-sm">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
-                <div id="chunk-content-${index}" class="chunk-content" title="Click to scroll">${escapeHtml(chunk.content)}</div>
-                <div class="chunk-actions">
-                    <button class="btn-icon" onclick="scrollToChunkTop(${index})" title="Go to Start">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon-sm">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
-                        </svg>
-                    </button>
-                    <button class="btn-icon" onclick="scrollToChunkBottom(${index})" title="Go to End">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon-sm">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                        </svg>
-                    </button>
-                    <div style="width: 1px; height: 20px; background: var(--border-color); margin: 0 0.5rem;"></div>
-                    <button class="btn-icon" onclick="copyChunk(${index}, this)" title="Copy to Clipboard">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon-sm">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
-                        </svg>
-                    </button>
-                    <button class="btn-icon" onclick="downloadChunk(${index})" title="Download .txt">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon-sm">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                        </svg>
-                    </button>
+                <div id="chunk-scroll-container-${index}" class="chunk-body" title="Click to scroll">
+                    <div class="chunk-line-numbers">${generateLineNumbers(chunk.lineStart, chunk.lineEnd)}</div>
+                    <div class="chunk-content">${escapeHtml(chunk.content)}</div>
                 </div>
             `;
 
             // Interaction Logic for Scroll Trap Prevention
-            const contentEl = card.querySelector('.chunk-content');
-            contentEl.addEventListener('click', () => {
-                contentEl.classList.add('scroll-enabled');
+            const contentEl = card.querySelector('.chunk-body');
+
+            // Toggle scroll enabled on click
+            contentEl.addEventListener('click', (e) => {
+                // Only enable scroll if not clicking line numbers (handled separately)
+                if (!e.target.closest('.chunk-line-numbers')) {
+                    contentEl.classList.add('scroll-enabled');
+                }
             });
+
             contentEl.addEventListener('mouseleave', () => {
                 contentEl.classList.remove('scroll-enabled');
+            });
+
+            // Line Number Click to Scroll Main Input
+            const lineNumbersEl = card.querySelector('.chunk-line-numbers');
+            lineNumbersEl.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent triggering scroll-enabled toggle if unwanted, or let it bubble?
+                // Let's stop propagation to keep logic clean, line numbers don't need to enable scroll on the content necessarily
+
+                const rect = lineNumbersEl.getBoundingClientRect();
+                const clickY = e.clientY - rect.top; // rect.top accounts for scroll relative to viewport
+                const lineHeight = parseFloat(getComputedStyle(lineNumbersEl).lineHeight);
+                const paddingTop = parseFloat(getComputedStyle(lineNumbersEl).paddingTop);
+
+                // Calculate which line index within this chunk (0-indexed)
+                const lineIndexInChunk = Math.max(0, Math.floor((clickY - paddingTop) / lineHeight));
+
+                // Determine actual line number
+                const targetLine = chunk.lineStart + lineIndexInChunk;
+
+                if (targetLine >= chunk.lineStart && targetLine <= chunk.lineEnd) {
+                    scrollToInputLine(targetLine);
+                }
             });
 
             fragment.appendChild(card);
@@ -313,14 +343,65 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Utilities - Global
     window.scrollToChunkTop = (index) => {
-        const el = document.getElementById(`chunk-content-${index}`);
+        const el = document.getElementById(`chunk-scroll-container-${index}`);
         if (el) el.scrollTop = 0;
     };
 
     window.scrollToChunkBottom = (index) => {
-        const el = document.getElementById(`chunk-content-${index}`);
+        const el = document.getElementById(`chunk-scroll-container-${index}`);
         if (el) el.scrollTop = el.scrollHeight;
     };
+
+    function scrollToInputLine(lineNumber) {
+        // Ensure lineNumber is valid
+        if (lineNumber < 1) return;
+
+        // Get actual line height from CSS variable (or re-calculate if missing)
+        const styles = getComputedStyle(document.documentElement);
+        const actualLineHeight = parseFloat(styles.getPropertyValue('--actual-line-height')) || 24; // Fallback
+
+        // Calculate scroll position (0-indexed logic for scroll)
+        // Calculate scroll position (0-indexed logic for scroll)
+        // We need to account for the top padding of the textarea so the line appears at the true visual top
+        const computedStyle = getComputedStyle(textInput);
+        const paddingTop = parseFloat(computedStyle.paddingTop) || 0;
+
+        // Target position: (LineIndex * Height) + PaddingOffset
+        // If we simply set scrollTop to (LineIndex * Height), the first line (LineIndex 0) is at 0.
+        // But physically, it's rendered at Y=paddingTop.
+        // Wait, scrollTop moves the view.
+        // If scrollTop = 0, we see [Padding][Line1]...
+        // To put Line 2 at the top of the *viewport* (hiding Line 1 and Padding):
+        // scrollTop needs to be Padding + LineHeight.
+
+        // Correct Logic:
+        // To show Line N at top:
+        // scrollTop = (N - 1) * actualLineHeight + paddingTop;
+        // Example: Line 1. N=1. scrollTop = 0 + 24 = 24.
+        // This scrolls past the 24px padding. AND the 0px of previous lines.
+        // Result: Line 1 appears at very top.
+        // Wait, if scrollTop = 24, and content starts at 24 (padding).
+        // Then we scroll past the padding. So Line 1 is cleanly at top.
+        // What if N=1?
+        // If the user clicks Line 1, they usually expect to see it at the top.
+        // But for Line 1, it's safer to show padding?
+        // Actually, users usually prefer to keep the top padding visible for Line 1.
+
+        let targetScrollTop;
+        if (lineNumber === 1) {
+            targetScrollTop = 0;
+        } else {
+            targetScrollTop = ((lineNumber - 1) * actualLineHeight) + paddingTop;
+        }
+
+        // Scroll the input
+        textInput.scrollTop = targetScrollTop;
+
+        // Also sync the main line numbers (though scroll listener handles it, explicit sync is safe)
+        if (lineNumbers) lineNumbers.scrollTop = targetScrollTop;
+
+        // Optional: formatting to highlight? For now just scroll.
+    }
 
     window.copyChunk = async (index, btn) => {
         const text = currentChunks[index].content;
@@ -363,6 +444,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
     };
+
+    function generateLineNumbers(start, end) {
+        let lines = '';
+        for (let i = start; i <= end; i++) {
+            lines += i + '\n';
+        }
+        return lines.trimEnd(); // Remove trailing newline
+    }
 
     function escapeHtml(text) {
         const div = document.createElement('div');

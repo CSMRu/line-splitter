@@ -25,6 +25,8 @@
     --font-sans: 'Inter', 'Noto Sans KR', 'Malgun Gothic', 'Meiryo', sans-serif;
     --header-height: 80px;
     --line-height: 1.6;
+    --actual-line-height: 24px;
+    /* Fallback, updated by JS */
 }
 
 body.light-theme {
@@ -156,6 +158,8 @@ body.light-theme .theme-toggle .moon-icon {
     flex-direction: column;
     overflow: hidden;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 0;
+    /* Fix flex child overflow issue */
 }
 
 .panel-header {
@@ -309,8 +313,9 @@ body.light-theme .theme-toggle .moon-icon {
     font-family: monospace;
     font-size: 0.95rem;
     text-align: right;
+    text-align: right;
     padding: 1.5rem 0.5rem;
-    line-height: var(--line-height);
+    line-height: var(--actual-line-height);
     user-select: none;
     overflow: hidden;
     white-space: pre;
@@ -327,8 +332,9 @@ textarea {
     font-size: 0.95rem;
     padding: 1.5rem;
     resize: none;
+    resize: none;
     outline: none;
-    line-height: 1.6;
+    line-height: var(--actual-line-height);
     overflow-y: auto;
     white-space: pre;
 
@@ -396,43 +402,101 @@ textarea {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
-    padding: 1rem;
+    padding: 0.75rem;
     transition: border-color 0.2s ease;
 }
 
-.chunk-card:hover {
+/* .chunk-card:hover {
     border-color: var(--primary);
-}
+} */
 
 .chunk-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.25rem;
     font-size: 0.875rem;
     color: var(--text-muted);
 }
 
-.chunk-content {
+.chunk-body {
+    display: flex;
     background: var(--chunk-content-bg);
     border-radius: 4px;
-    padding: 0.75rem;
     font-family: monospace;
     font-size: 0.85rem;
     color: var(--text-muted);
     max-height: 150px;
-    overflow-y: hidden;
-    white-space: pre-wrap;
-    margin-bottom: 0.75rem;
+    overflow: auto;
+    /* Enable scrollbars when needed */
+    margin-bottom: 0;
     border: 1px solid transparent;
     cursor: pointer;
     transition: background-color 0.2s;
+
+    /* Zebra Striping (Moved to container for consistent scrolling) */
+    background-image: repeating-linear-gradient(to bottom,
+            transparent,
+            transparent var(--actual-line-height),
+            var(--zebra-stripe) var(--actual-line-height),
+            var(--zebra-stripe) calc(var(--actual-line-height) * 2));
+    background-position-y: 0.5rem;
+    /* Match content padding */
+    background-size: 100% calc(var(--actual-line-height) * 2);
+    background-repeat: repeat;
+    background-attachment: local;
+    /* Ensure it scrolls with content */
+
+    /* Hide scrollbars by default for cleaner look, show on hover/active if needed? 
+       Actually, standard scrollbars are fine, but let's just use overflow: auto.
+       Wait, if I set overflow: auto here, it might show vertical scrollbar for small overflows
+       even before "scroll-enabled" active state. The original design used overflow: hidden.
+       
+       Better approach:
+       overflow-x: auto;
+       overflow-y: hidden;
+    */
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
-.chunk-content.scroll-enabled {
+.chunk-body.scroll-enabled {
     overflow-y: auto;
+    /* Enable vertical scroll on click */
     background: var(--chunk-content-bg-scroll);
     cursor: text;
+    border-color: var(--primary);
+}
+
+.chunk-line-numbers {
+    flex-shrink: 0;
+    min-width: 30px;
+    padding: 0.5rem 0.5rem;
+    text-align: right;
+    line-height: var(--actual-line-height);
+    cursor: pointer;
+    border-right: 1px solid var(--border-color);
+    background: var(--line-numbers-bg);
+    color: var(--line-numbers-text);
+    white-space: pre;
+    user-select: none;
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    /* Ensure above content when scrolling horizontally */
+}
+
+.chunk-content {
+    flex: 1;
+    padding: 0.5rem;
+    white-space: pre;
+    line-height: var(--actual-line-height);
+    /* No wrap to match line numbers */
+    color: var(--text-muted);
+    background: transparent;
+
+    /* Zebra Striping */
+    /* Moved to .chunk-body to fix scrolling issues */
 }
 
 .chunk-actions {
@@ -446,7 +510,7 @@ textarea {
     cursor: pointer;
     border: 1px solid var(--border-color);
     border-radius: 6px;
-    padding: 0.4rem;
+    padding: 0.25rem;
     background: var(--card-bg);
     color: var(--text-muted);
     display: flex;
