@@ -42,7 +42,7 @@ body.light-theme {
     --zebra-stripe: rgba(0, 0, 0, 0.03);
     --line-numbers-bg: rgba(0, 0, 0, 0.05);
     --line-numbers-text: #9ca3af;
-    --chunk-content-bg: rgba(0, 0, 0, 0.05);
+    --chunk-content-bg: transparent;
     --chunk-content-bg-scroll: rgba(0, 0, 0, 0.08);
     --drop-overlay-bg: rgba(248, 249, 250, 0.95);
     --panel-bg: rgba(255, 255, 255, 0.8);
@@ -314,7 +314,8 @@ body.light-theme .theme-toggle .moon-icon {
     font-size: 0.95rem;
     text-align: right;
     text-align: right;
-    padding: 1.5rem 0.5rem;
+    /* Padding synced with line-height for zebra alignment */
+    padding: var(--actual-line-height, 1.5rem) 0.5rem;
     line-height: var(--actual-line-height);
     user-select: none;
     overflow: hidden;
@@ -330,7 +331,8 @@ textarea {
     color: var(--text-main);
     font-family: monospace;
     font-size: 0.95rem;
-    padding: 1.5rem;
+    /* Padding synced with line-height for zebra alignment */
+    padding: var(--actual-line-height, 1.5rem);
     resize: none;
     resize: none;
     outline: none;
