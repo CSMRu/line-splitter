@@ -340,14 +340,13 @@ textarea {
     overflow-y: auto;
     white-space: pre;
 
-    /* Zebra Striping - uses dynamically measured line-height for pixel-perfect alignment */
+    /* Zebra Striping - uses robust background-size for perfect alignment */
     --actual-line-height: 24.32px;
     /* fallback, will be overridden by JS */
-    background-image: repeating-linear-gradient(to bottom,
-            transparent,
-            transparent var(--actual-line-height),
-            var(--zebra-stripe) var(--actual-line-height),
-            var(--zebra-stripe) calc(var(--actual-line-height) * 2));
+    background-image: linear-gradient(to bottom,
+            transparent 50%,
+            var(--zebra-stripe) 50%);
+    background-size: 100% calc(var(--actual-line-height) * 2);
     background-attachment: local;
 }
 
@@ -437,11 +436,9 @@ textarea {
     transition: background-color 0.2s;
 
     /* Zebra Striping (Moved to container for consistent scrolling) */
-    background-image: repeating-linear-gradient(to bottom,
-            transparent,
-            transparent var(--actual-line-height),
-            var(--zebra-stripe) var(--actual-line-height),
-            var(--zebra-stripe) calc(var(--actual-line-height) * 2));
+    background-image: linear-gradient(to bottom,
+            transparent 50%,
+            var(--zebra-stripe) 50%);
     background-position-y: 0.5rem;
     /* Match content padding */
     background-size: 100% calc(var(--actual-line-height) * 2);
