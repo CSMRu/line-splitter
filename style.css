@@ -591,3 +591,46 @@ textarea {
         transform: translate(-50%, 0);
     }
 }
+
+/* Swapped State */
+.split-view.swapped {
+    flex-direction: row-reverse;
+}
+
+/* Fix shadow and positioning for layout toggle in swapped state */
+.split-view.swapped .layout-toggle {
+    left: auto;
+    right: 0;
+    transform: translate(50%, -50%);
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.split-view.swapped .layout-toggle:hover {
+    transform: translate(50%, -50%) scale(1.1);
+}
+
+/* Icon rotation for swapped state */
+.split-view.swapped .layout-toggle svg {
+    transform: rotate(180deg);
+}
+
+/* Expanded State logic when Swapped */
+.split-view.swapped.expanded .layout-toggle svg {
+    transform: rotate(0deg);
+}
+
+/* Fix margin collapse for input panel when swapped and expanded */
+.split-view.swapped.expanded .input-panel {
+    margin-right: 0;
+    margin-left: -1.5rem;
+}
+
+.split-view.swapped.expanded .layout-toggle {
+    left: auto;
+    right: 0;
+    transform: translate(50%, -50%);
+}
+
+.split-view.swapped.expanded .layout-toggle:hover {
+    transform: translate(50%, -50%) scale(1.1);
+}

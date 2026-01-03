@@ -70,6 +70,21 @@ document.addEventListener('DOMContentLoaded', () => {
         splitView.classList.toggle('expanded');
     });
 
+    // Panel Swap Toggle
+    const swapPanelsBtn = document.getElementById('swap-panels-btn');
+    const savedLayout = localStorage.getItem('layout') || 'normal';
+
+    // Apply saved layout
+    if (savedLayout === 'swapped') {
+        splitView.classList.add('swapped');
+    }
+
+    swapPanelsBtn.addEventListener('click', () => {
+        splitView.classList.toggle('swapped');
+        const currentLayout = splitView.classList.contains('swapped') ? 'swapped' : 'normal';
+        localStorage.setItem('layout', currentLayout);
+    });
+
     // Line Numbers & Scroll Sync
     const updateLineNumbers = () => {
         const text = textInput.value;
