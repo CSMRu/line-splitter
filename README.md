@@ -33,3 +33,7 @@ A modern, highly responsive web application designed to instantly split large te
     - Use the top menu to adjust themes, layouts, font sizes, and input lock state.
     - Use block-specific buttons to copy or download.
     - Click line numbers in the output to jump to the corresponding location in the input source.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
