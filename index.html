@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -59,11 +59,8 @@
             <!-- Left Panel: Input & Controls -->
             <section class="panel input-panel">
                 <div class="panel-header">
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <h2>Input</h2>
-                        <span id="input-line-count" class="badge">0 line</span>
-                    </div>
-                    <div class="input-control">
+                    <div class="input-control-group left" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <h2 style="margin-right: 1rem;">Input</h2>
                         <button id="lock-toggle-btn" class="btn-icon" title="Unlock Input">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="icon-sm">
@@ -80,9 +77,13 @@
                             </svg>
                         </button>
                         <div class="divider"></div>
-                        <label for="lines-per-block">lines per block</label>
+                        <label for="lines-per-block" style="white-space: nowrap;">lines per block</label>
                         <input type="number" id="lines-per-block" value="80" min="1">
-                        <div class="divider"></div>
+                    </div>
+
+                    <div class="input-control-group right"
+                        style="display: flex; align-items: center; gap: 0.75rem; margin-left: auto;">
+                        <div style="flex: 1;"></div> <!-- Spacer just in case -->
                         <button id="input-scroll-top" class="btn-icon" title="Go to Start">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="icon-sm">
@@ -95,6 +96,8 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                             </svg>
                         </button>
+                        <div class="divider"></div>
+                        <span id="input-line-count" class="badge">0 line</span>
                     </div>
                 </div>
 

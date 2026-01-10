@@ -322,7 +322,7 @@ body.light-theme .theme-toggle .moon-icon {
 }
 
 /* Input Controls */
-.input-control {
+.input-control-group {
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -335,12 +335,12 @@ body.light-theme .theme-toggle .moon-icon {
     margin: 0 0.25rem;
 }
 
-.input-control label {
+.input-control-group label {
     font-size: 0.875rem;
     color: var(--text-muted);
 }
 
-.input-control input {
+.input-control-group input {
     background: var(--bg-color);
     border: 1px solid var(--border-color);
     color: var(--text-main);
@@ -352,7 +352,7 @@ body.light-theme .theme-toggle .moon-icon {
     text-align: center;
 }
 
-.input-control input:focus {
+.input-control-group input:focus {
     border-color: var(--primary);
 }
 
@@ -489,6 +489,13 @@ textarea {
     border-radius: 999px;
     font-size: 0.8rem;
     font-weight: 600;
+}
+
+#input-line-count,
+#result-count {
+    min-width: 100px;
+    text-align: center;
+    display: inline-block;
 }
 
 .block-card {
