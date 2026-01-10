@@ -9,13 +9,13 @@
     --text-muted: #9ca3af;
     --border-color: #2d313a;
     --glass-border: rgba(255, 255, 255, 0.08);
-    --zebra-stripe: rgba(255, 255, 255, 0.03);
-    --line-numbers-bg: #1a1d24;
+    --zebra-stripe: rgba(0, 0, 0, 0.4);
+    --line-numbers-bg: #14171c;
     --primary-gradient: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
     --line-numbers-text: #4b5563;
-    --chunk-content-bg: #0d0f12;
-    --chunk-line-numbers-bg: #14171c;
-    --chunk-content-bg-scroll: rgba(0, 0, 0, 0.4);
+    --block-content-bg: #0d0f12;
+    --block-line-numbers-bg: #14171c;
+    --block-content-bg-scroll: rgba(0, 0, 0, 0.4);
     --panel-bg: rgba(24, 27, 33, 0.5);
     --panel-header-bg: rgba(24, 27, 33, 0.8);
     --panel-header-text: #9ca3af;
@@ -56,9 +56,9 @@ body.light-theme {
     --zebra-stripe: rgba(0, 0, 0, 0.03);
     --line-numbers-bg: #f1f3f5;
     --line-numbers-text: #9ca3af;
-    --chunk-content-bg: #fafafa;
-    --chunk-line-numbers-bg: #f1f3f5;
-    --chunk-content-bg-scroll: rgba(0, 0, 0, 0.08);
+    --block-content-bg: rgba(0, 0, 0, 0.08);
+    --block-line-numbers-bg: #f1f3f5;
+    --block-content-bg-scroll: #fafafa;
     --drop-overlay-bg: rgba(248, 249, 250, 0.95);
     --panel-bg: rgba(255, 255, 255, 0.8);
     --panel-header-bg: rgba(241, 243, 245, 0.95);
@@ -235,6 +235,7 @@ body.light-theme .theme-toggle .moon-icon {
 
 .panel-header {
     padding: 1rem 1.5rem;
+    min-height: 64px;
     border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
@@ -460,7 +461,7 @@ textarea {
 }
 
 /* Results Panel */
-.chunks-list {
+.blocks-list {
     flex: 1;
     overflow-y: auto;
     padding: 1.5rem;
@@ -490,43 +491,41 @@ textarea {
     font-weight: 600;
 }
 
-.chunk-card {
+.block-card {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
-    padding: 0.75rem;
+    padding: 0.5rem;
     transition: all 0.2s ease;
     contain: content;
     /* Performance optimization */
 }
 
-.chunk-card.highlighted {
+.block-card.highlighted {
     border-color: color-mix(in srgb, var(--highlight-color), transparent 20%) !important;
     box-shadow: 0 0 8px var(--highlight-glow);
 }
 
-/* .chunk-card:hover {
-    border-color: var(--primary);
-} */
 
-.chunk-header {
+
+.block-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
     font-size: 0.875rem;
     color: var(--text-muted);
 }
 
-.chunk-body {
-    background: var(--chunk-content-bg);
+.block-body {
+    background: var(--block-content-bg);
     border-radius: 4px;
     font-family: monospace;
     font-size: 0.85rem;
     color: var(--text-muted);
     max-height: 190px;
-    overflow: hidden;
-    /* Disable all scrolling until clicked */
+    overflow-x: auto;
+    overflow-y: hidden;
     margin-bottom: 0;
     border: 1px solid transparent;
     cursor: pointer;
@@ -534,7 +533,7 @@ textarea {
     overscroll-behavior: contain;
 }
 
-.chunk-flex-wrapper {
+.block-flex-wrapper {
     display: flex;
     min-height: 100%;
     width: max-content;
@@ -543,7 +542,7 @@ textarea {
 
 /* Safari-specific fix for zebra stripes */
 @supports (-webkit-touch-callout: none) {
-    .chunk-content {
+    .block-content {
         background-attachment: scroll;
     }
 
@@ -553,15 +552,23 @@ textarea {
 }
 
 /* Restore highlight effect on click */
-.chunk-body.highlight-active {
-    background: var(--chunk-content-bg-scroll);
+.block-body.highlight-active {
+    background: var(--block-content-bg-scroll);
     border-color: transparent;
     box-shadow: 0 0 0 2px var(--card-bg), 0 0 0 3px color-mix(in srgb, var(--primary), transparent 20%);
     overflow: auto;
     /* Enable all scrolling on click */
 }
 
-.chunk-line-numbers {
+.block-body.highlight-active .block-content {
+    color: #ffffff;
+}
+
+body.light-theme .block-body.highlight-active .block-content {
+    color: #000000;
+}
+
+.block-line-numbers {
     flex-shrink: 0;
     min-width: 40px;
     padding: 0.5rem 0.6rem;
@@ -571,7 +578,7 @@ textarea {
     font-family: monospace;
     cursor: pointer;
     border-right: 1px solid var(--border-color);
-    background: var(--chunk-line-numbers-bg);
+    background: var(--block-line-numbers-bg);
     color: var(--line-numbers-text);
     white-space: pre;
     user-select: none;
@@ -581,7 +588,7 @@ textarea {
     /* Higher z-index to prevent text overlap during horizontal scroll */
 }
 
-.chunk-content {
+.block-content {
     flex: 1;
     padding: 0.5rem;
     white-space: pre;
@@ -592,7 +599,7 @@ textarea {
     background: transparent;
     position: relative;
     z-index: 1;
-    /* Lower z-index than line numbers to prevent overlap */
+    /* Lower z-index to prevent overlap */
 
     /* Zebra Striping - Applied only to content area */
     background-image: linear-gradient(to bottom,
@@ -604,10 +611,11 @@ textarea {
     background-attachment: local;
 }
 
-.chunk-actions {
+.block-actions {
     display: flex;
     gap: 0.5rem;
     justify-content: flex-end;
+    align-items: center;
 }
 
 .btn-icon {
@@ -742,8 +750,13 @@ textarea {
 textarea[readonly] {
     cursor: not-allowed;
     opacity: 0.7;
-    background-color: rgba(0, 0, 0, 0.1);
-    /* Subtle darkening */
+    background-color: rgba(0, 0, 0, 0.7);
+    /* Darker for dark theme */
+}
+
+body.light-theme textarea[readonly] {
+    background-color: rgba(0, 0, 0, 0.05);
+    /* Lighter for light theme */
 }
 
 textarea[readonly]::placeholder {

@@ -80,8 +80,8 @@
                             </svg>
                         </button>
                         <div class="divider"></div>
-                        <label for="lines-per-chunk">Lines per chunk</label>
-                        <input type="number" id="lines-per-chunk" value="80" min="1">
+                        <label for="lines-per-block">lines per block</label>
+                        <input type="number" id="lines-per-block" value="80" min="1">
                         <div class="divider"></div>
                         <button id="input-scroll-top" class="btn-icon" title="Go to Start">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -125,10 +125,10 @@
                 </button>
                 <div class="panel-header">
                     <h2>Output</h2>
-                    <span id="result-count" class="badge">0 chunk</span>
+                    <span id="result-count" class="badge">0 block</span>
                 </div>
-                <div id="chunks-container" class="chunks-list">
-                    <!-- Chunks will be generated here -->
+                <div id="blocks-container" class="blocks-list">
+                    <!-- Blocks will be generated here -->
                     <div class="empty-state">
                         Start typing or upload a file to see results...
                     </div>

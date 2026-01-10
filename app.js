@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Elements
     const dropZone = document.getElementById('drop-zone');
     const textInput = document.getElementById('text-input');
-    const linesInput = document.getElementById('lines-per-chunk');
-    const chunksContainer = document.getElementById('chunks-container');
+    const linesInput = document.getElementById('lines-per-block');
+    const blocksContainer = document.getElementById('blocks-container');
     const resultCount = document.getElementById('result-count');
     const inputLineCount = document.getElementById('input-line-count');
     const toast = document.getElementById('toast');
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const lockToggleBtn = document.getElementById('lock-toggle-btn');
 
     // State
-    let currentChunks = [];
+    let currentBlocks = [];
     let debounceTimer;
     let currentFontSize = parseInt(localStorage.getItem('fontSize')) || 12;
     let isLocked = true; // Default locked state
@@ -301,65 +301,65 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function triggerSplit() {
         const text = textInput.value;
-        const linesPerChunk = parseInt(linesInput.value, 10);
+        const linesPerBlock = parseInt(linesInput.value, 10);
 
         if (!text.trim()) {
             renderEmptyState();
             return;
         }
 
-        if (isNaN(linesPerChunk) || linesPerChunk < 1) {
+        if (isNaN(linesPerBlock) || linesPerBlock < 1) {
             return;
         }
 
-        processSplit(text, linesPerChunk);
+        processSplit(text, linesPerBlock);
     }
 
-    function processSplit(text, chunkSize) {
+    function processSplit(text, blockSize) {
         const lines = text.split(/\r?\n/);
-        currentChunks = [];
+        currentBlocks = [];
 
-        for (let i = 0; i < lines.length; i += chunkSize) {
-            const chunk = lines.slice(i, i + chunkSize).join('\n');
-            currentChunks.push({
-                id: i / chunkSize + 1,
-                content: chunk,
+        for (let i = 0; i < lines.length; i += blockSize) {
+            const block = lines.slice(i, i + blockSize).join('\n');
+            currentBlocks.push({
+                id: i / blockSize + 1,
+                content: block,
                 lineStart: i + 1,
-                lineEnd: Math.min(i + chunkSize, lines.length)
+                lineEnd: Math.min(i + blockSize, lines.length)
             });
         }
 
-        renderResults(lines.length, chunkSize);
+        renderResults(lines.length, blockSize);
     }
 
     function renderEmptyState() {
-        chunksContainer.innerHTML = `
+        blocksContainer.innerHTML = `
             <div class="empty-state">
                 Start typing or upload a file to see results...
             </div>
         `;
-        resultCount.textContent = '0 chunk';
+        resultCount.textContent = '0 block';
     }
 
-    function renderResults(totalLines, chunkSize) {
-        chunksContainer.innerHTML = '';
+    function renderResults(totalLines, blockSize) {
+        blocksContainer.innerHTML = '';
 
-        let countText = `${currentChunks.length} ${currentChunks.length <= 1 ? 'chunk' : 'chunks'}`;
+        let countText = `${currentBlocks.length} ${currentBlocks.length <= 1 ? 'block' : 'blocks'}`;
 
-        if (totalLines && chunkSize) {
-            const fullChunks = Math.floor(totalLines / chunkSize);
-            const remainder = totalLines % chunkSize;
+        if (totalLines && blockSize) {
+            const fullBlocks = Math.floor(totalLines / blockSize);
+            const remainder = totalLines % blockSize;
 
             if (remainder > 0) {
-                countText = `${fullChunks} ${fullChunks <= 1 ? 'chunk' : 'chunks'} + ${remainder} ${remainder <= 1 ? 'line' : 'lines'}`;
+                countText = `${fullBlocks} ${fullBlocks <= 1 ? 'block' : 'blocks'} + ${remainder} ${remainder <= 1 ? 'line' : 'lines'}`;
             } else {
-                countText = `${fullChunks} ${fullChunks <= 1 ? 'chunk' : 'chunks'}`;
+                countText = `${fullBlocks} ${fullBlocks <= 1 ? 'block' : 'blocks'}`;
             }
         }
 
         resultCount.textContent = countText;
 
-        if (currentChunks.length === 0) {
+        if (currentBlocks.length === 0) {
             renderEmptyState();
             return;
         }
@@ -375,53 +375,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function renderBatch() {
             const fragment = document.createDocumentFragment();
-            const end = Math.min(renderedCount + BATCH_SIZE, currentChunks.length);
+            const end = Math.min(renderedCount + BATCH_SIZE, currentBlocks.length);
 
             for (let i = renderedCount; i < end; i++) {
-                const chunk = currentChunks[i];
+                const block = currentBlocks[i];
                 const index = i;
                 const card = document.createElement('div');
-                card.className = 'chunk-card';
+                card.className = 'block-card';
 
                 card.innerHTML = `
-                    <div class="chunk-header">
-                        <span>Split part ${chunk.id}</span>
-                        <div class="chunk-actions">
-                            <button class="btn-icon" onclick="scrollToChunkTop(${index})" title="Go to Start">
+                    <div class="block-header">
+                        <span>Block ${block.id}</span>
+                        <div class="block-actions">
+                            <button class="btn-icon" onclick="scrollToBlockTop(${index})" title="Go to Start">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon-sm">
                                   <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
                                 </svg>
                             </button>
-                            <button class="btn-icon" onclick="scrollToChunkBottom(${index})" title="Go to End">
+                            <button class="btn-icon" onclick="scrollToBlockBottom(${index})" title="Go to End">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon-sm">
                                   <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                                 </svg>
                             </button>
                             <div style="width: 1px; height: 20px; background: var(--border-color); margin: 0 0.5rem;"></div>
-                            <button class="btn-icon" onclick="copyChunk(${index}, this)" title="Copy to Clipboard">
+                            <button class="btn-icon" onclick="copyBlock(${index}, this)" title="Copy to Clipboard">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon-sm">
                                   <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
                                 </svg>
                             </button>
-                            <button class="btn-icon" onclick="downloadChunk(${index}, this)" title="Download .txt">
+                            <button class="btn-icon" onclick="downloadBlock(${index}, this)" title="Download .txt">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon-sm">
                                   <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
                                 </svg>
                             </button>
                         </div>
                     </div>
-                    <div id="chunk-scroll-container-${index}" class="chunk-body" title="Click to scroll">
-                        <div class="chunk-flex-wrapper">
-                            <div class="chunk-line-numbers">${generateLineNumbers(chunk.lineStart, chunk.lineEnd)}</div>
-                            <div class="chunk-content">${escapeHtml(chunk.content)}</div>
+                    <div id="block-scroll-container-${index}" class="block-body" title="Click to scroll">
+                        <div class="block-flex-wrapper">
+                            <div class="block-line-numbers">${generateLineNumbers(block.lineStart, block.lineEnd)}</div>
+                            <div class="block-content">${escapeHtml(block.content)}</div>
                         </div>
                     </div>
                 `;
 
                 // Interaction Logic
-                const contentEl = card.querySelector('.chunk-body');
+                const contentEl = card.querySelector('.block-body');
                 contentEl.addEventListener('click', (e) => {
-                    if (!e.target.closest('.chunk-line-numbers')) {
+                    if (!e.target.closest('.block-line-numbers')) {
                         contentEl.classList.add('highlight-active');
                     }
                 });
@@ -429,17 +429,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     contentEl.classList.remove('highlight-active');
                 });
 
-                const lineNumbersEl = card.querySelector('.chunk-line-numbers');
+                const lineNumbersEl = card.querySelector('.block-line-numbers');
                 lineNumbersEl.addEventListener('click', (e) => {
                     e.stopPropagation();
                     const rect = lineNumbersEl.getBoundingClientRect();
                     const clickY = e.clientY - rect.top;
                     const lineHeight = parseFloat(getComputedStyle(lineNumbersEl).lineHeight);
                     const paddingTop = parseFloat(getComputedStyle(lineNumbersEl).paddingTop);
-                    const lineIndexInChunk = Math.max(0, Math.floor((clickY - paddingTop) / lineHeight));
-                    const targetLine = chunk.lineStart + lineIndexInChunk;
+                    const lineIndexInBlock = Math.max(0, Math.floor((clickY - paddingTop) / lineHeight));
+                    const targetLine = block.lineStart + lineIndexInBlock;
 
-                    if (targetLine >= chunk.lineStart && targetLine <= chunk.lineEnd) {
+                    if (targetLine >= block.lineStart && targetLine <= block.lineEnd) {
                         scrollToInputLine(targetLine);
                     }
                 });
@@ -447,10 +447,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 fragment.appendChild(card);
             }
 
-            chunksContainer.appendChild(fragment);
+            blocksContainer.appendChild(fragment);
             renderedCount += BATCH_SIZE;
 
-            if (renderedCount < currentChunks.length) {
+            if (renderedCount < currentBlocks.length) {
                 requestAnimationFrame(renderBatch);
             }
         }
@@ -459,13 +459,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Utilities - Global
-    window.scrollToChunkTop = (index) => {
-        const el = document.getElementById(`chunk-scroll-container-${index}`);
+    window.scrollToBlockTop = (index) => {
+        const el = document.getElementById(`block-scroll-container-${index}`);
         if (el) el.scrollTop = 0;
     };
 
-    window.scrollToChunkBottom = (index) => {
-        const el = document.getElementById(`chunk-scroll-container-${index}`);
+    window.scrollToBlockBottom = (index) => {
+        const el = document.getElementById(`block-scroll-container-${index}`);
         if (el) el.scrollTop = el.scrollHeight;
     };
 
@@ -520,21 +520,21 @@ document.addEventListener('DOMContentLoaded', () => {
         // Optional: formatting to highlight? For now just scroll.
     }
 
-    window.copyChunk = async (index, btn) => {
-        const text = currentChunks[index].content;
+    window.copyBlock = async (index, btn) => {
+        const text = currentBlocks[index].content;
         try {
             await navigator.clipboard.writeText(text);
             showToast('Copied to clipboard!');
 
             // Add highlight (Unique)
-            document.querySelectorAll('.chunk-card').forEach(c => c.classList.remove('highlighted'));
-            const card = btn.closest('.chunk-card');
+            document.querySelectorAll('.block-card').forEach(c => c.classList.remove('highlighted'));
+            const card = btn.closest('.block-card');
             if (card) {
                 card.classList.add('highlighted');
             }
 
             // Auto-scroll to bottom
-            window.scrollToChunkBottom(index);
+            window.scrollToBlockBottom(index);
 
             // Handle Badge
             let badge = btn.querySelector('.notification-badge');
@@ -556,21 +556,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    window.downloadChunk = (index, btn) => {
-        const chunk = currentChunks[index];
+    window.downloadBlock = (index, btn) => {
+        const block = currentBlocks[index];
 
         // Add highlight (Unique)
-        document.querySelectorAll('.chunk-card').forEach(c => c.classList.remove('highlighted'));
-        const card = btn.closest('.chunk-card');
+        document.querySelectorAll('.block-card').forEach(c => c.classList.remove('highlighted'));
+        const card = btn.closest('.block-card');
         if (card) {
             card.classList.add('highlighted');
         }
 
-        const blob = new Blob(['\uFEFF' + chunk.content], { type: 'text/plain;charset=utf-8' });
+        const blob = new Blob(['\uFEFF' + block.content], { type: 'text/plain;charset=utf-8' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `split_part_${chunk.id}.txt`;
+        a.download = `block_${block.id}.txt`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
