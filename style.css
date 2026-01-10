@@ -749,13 +749,15 @@ body.light-theme .block-body.highlight-active .block-content {
 /* Read-only Textarea Style */
 textarea[readonly] {
     cursor: not-allowed;
-    opacity: 0.7;
-    background-color: rgba(0, 0, 0, 0.7);
+    opacity: 1;
+    color: #9ca3af;
+    background-color: rgba(0, 0, 0, 0.3);
     /* Darker for dark theme */
 }
 
 body.light-theme textarea[readonly] {
     background-color: rgba(0, 0, 0, 0.05);
+    color: #4b5563;
     /* Lighter for light theme */
 }
 

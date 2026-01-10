@@ -1,4 +1,4 @@
-# Line Splitter (v1.2)
+# Line Splitter (v1.21)
 
 A modern, highly responsive web application designed to instantly split large text files into manageable blocks based on a configurable line count. It features a real-time reactive interface, dark/light theme support, and advanced text navigation.
 
