@@ -1,4 +1,4 @@
-# Line Splitter (v1.22)
+# Line Splitter (v1.23)
 | <div align="center"> <a href="https://csmru.github.io/line-splitter/"><img src="favicon/android-chrome-192x192.png" width="128"></a> <br> [![Hosted on GitHub Pages](https://img.shields.io/badge/Hosted_on-GitHub_Pages-222222?style=for-the-badge&logo=github)](https://csmru.github.io/line-splitter/) </div> |
 | :--- |
 
@@ -11,6 +11,7 @@ A modern, highly responsive web application designed to instantly split large te
 - **Performance**: Validated for 200,000+ lines with batch rendering for a smooth UI.
 - **Secure & Robust**: XSS protection and safe handling of large inputs.
 - **Input Locking**: Prevent accidental edits with a toggleable read-only mode.
+- **Bulk Download**: One-click **"Download All (ZIP)"** to save all generated blocks as individual `.txt` files in a single archive.
 
 ### 🖥️ User Interface & Navigation
 - **Dual Panel Layout**: Input editor with line numbers (left) and scrollable block output (right).
@@ -31,9 +32,10 @@ A modern, highly responsive web application designed to instantly split large te
 1. **Input**: Type text directly into the left panel or upload a file.
 2. **Configure**: Enter your desired **lines per block** value.
 3. **Review**: Check the output panel for the real-time generated blocks.
-4. **Interact**:
+4. **Download All**: Use the ZIP icon in the output header to download all blocks at once.
+5. **Interact**:
     - Use the top menu to adjust themes, layouts, font sizes, and input lock state.
-    - Use block-specific buttons to copy or download.
+    - Use block-specific buttons to copy or download individual blocks.
     - Click line numbers in the output to jump to the corresponding location in the input source.
 
 ## 📄 License

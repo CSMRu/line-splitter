@@ -247,10 +247,37 @@ body.light-theme .theme-toggle .moon-icon {
 }
 
 .panel-header h2 {
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 600;
-    color: var(--panel-header-text);
-    letter-spacing: 0.05em;
+    color: var(--text-color);
+}
+
+.btn-text {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-outline {
+    border: 1px solid var(--border-color);
+}
+
+.btn-text:hover {
+    background: var(--bg-secondary);
+}
+
+.btn-outline:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
 }
 
 /* Result Panel */
@@ -637,10 +664,17 @@ body.light-theme .block-body.highlight-active .block-content {
     transition: all 0.2s;
 }
 
-.btn-icon:hover {
+.btn-icon:not(:disabled):hover {
     background: var(--card-hover);
     color: var(--text-main);
     border-color: var(--text-muted);
+}
+
+.btn-icon:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(1);
+    background: var(--card-bg);
 }
 
 .notification-badge {

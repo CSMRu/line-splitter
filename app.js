@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const fontSizeLabel = document.getElementById('font-size-label');
     const lockToggleBtn = document.getElementById('lock-toggle-btn');
+    const downloadAllZipBtn = document.getElementById('download-all-zip-btn');
 
     // State
     let currentBlocks = [];
@@ -299,6 +300,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     linesInput.addEventListener('input', triggerSplit);
 
+    if (downloadAllZipBtn) {
+        downloadAllZipBtn.addEventListener('click', () => {
+            downloadAllAsZip();
+        });
+    }
+
+    async function downloadAllAsZip() {
+        if (currentBlocks.length === 0) return;
+
+        try {
+            const zip = new JSZip();
+            currentBlocks.forEach(block => {
+                zip.file(getBlockFilename(block.id), '\uFEFF' + block.content);
+            });
+
+            const content = await zip.generateAsync({ type: 'blob' });
+            const url = URL.createObjectURL(content);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `split_blocks_${new Date().getTime()}.zip`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast('ZIP download started!');
+        } catch (err) {
+            console.error('ZIP Error:', err);
+            showToast('Failed to create ZIP.');
+        }
+    }
+
     function triggerSplit() {
         const text = textInput.value;
         const linesPerBlock = parseInt(linesInput.value, 10);
@@ -309,6 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (isNaN(linesPerBlock) || linesPerBlock < 1) {
+            renderEmptyState();
             return;
         }
 
@@ -339,8 +373,9 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
         resultCount.textContent = '0 block';
+        currentBlocks = [];
+        if (downloadAllZipBtn) downloadAllZipBtn.disabled = true;
     }
-
     function renderResults(totalLines, blockSize) {
         blocksContainer.innerHTML = '';
 
@@ -357,7 +392,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        resultCount.textContent = countText;
+        if (resultCount) {
+            resultCount.textContent = countText;
+        }
+
+        if (downloadAllZipBtn) {
+            downloadAllZipBtn.disabled = currentBlocks.length === 0;
+        }
 
         if (currentBlocks.length === 0) {
             renderEmptyState();
@@ -570,12 +611,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `block_${block.id}.txt`;
+        a.download = getBlockFilename(block.id);
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
     };
+
+    function getBlockFilename(id) {
+        if (id < 1000) {
+            return `block_${String(id).padStart(3, '0')}.txt`;
+        } else {
+            const thousands = Math.floor(id / 1000);
+            const remainder = String(id % 1000).padStart(3, '0');
+            return `block${thousands}_${remainder}.txt`;
+        }
+    }
 
     function generateLineNumbers(start, end) {
         let lines = '';
