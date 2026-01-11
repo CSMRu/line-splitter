@@ -315,11 +315,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 zip.file(getBlockFilename(block.id), '\uFEFF' + block.content);
             });
 
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const timestamp = `${year}${month}${day}-${hours}${minutes}${seconds}`;
+
             const content = await zip.generateAsync({ type: 'blob' });
             const url = URL.createObjectURL(content);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `split_blocks_${new Date().getTime()}.zip`;
+            a.download = `split_blocks_${timestamp}.zip`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
