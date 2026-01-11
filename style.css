@@ -298,7 +298,7 @@ body.light-theme .theme-toggle .moon-icon {
 
     z-index: 10;
     background: var(--primary);
-    color: white;
+    color: black;
     border: none;
     width: 16px;
     height: 36px;
@@ -310,6 +310,10 @@ body.light-theme .theme-toggle .moon-icon {
     box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     opacity: 1;
+}
+
+body.light-theme .layout-toggle {
+    color: white;
 }
 
 .layout-toggle:hover {
