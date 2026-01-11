@@ -1,4 +1,4 @@
-# Line Splitter (v1.23)
+# Line Splitter (v1.24)
 | <div align="center"> <a href="https://csmru.github.io/line-splitter/"><img src="favicon/android-chrome-192x192.png" width="128"></a> <br> [![Hosted on GitHub Pages](https://img.shields.io/badge/Hosted_on-GitHub_Pages-222222?style=for-the-badge&logo=github)](https://csmru.github.io/line-splitter/) </div> |
 | :--- |
 
