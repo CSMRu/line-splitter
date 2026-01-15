@@ -1,5 +1,5 @@
 # Line Splitter
-| <div align="center"> <a href="https://csmru.github.io/line-splitter/"><img src="favicon/android-chrome-192x192.png" width="128"></a> <br> [![Version](https://img.shields.io/badge/Version-26.0115-fbbf24?style=for-the-badge)](https://github.com/csmru/line-splitter/commits) [![Hosted on GitHub Pages](https://img.shields.io/badge/GitHub-Pages-306d35?style=for-the-badge&logo=github)](https://csmru.github.io/line-splitter/) </div> |
+| <div align="center"> <a href="https://csmru.github.io/line-splitter/"><img src="favicon/android-chrome-192x192.png" width="128"></a> <br> [![Version](https://img.shields.io/badge/Version-26.0115a-fbbf24?style=for-the-badge)](https://github.com/csmru/line-splitter/commits) [![Hosted on GitHub Pages](https://img.shields.io/badge/GitHub-Pages-306d35?style=for-the-badge&logo=github)](https://csmru.github.io/line-splitter/) </div> |
 | :--- |
 
 > A modern, highly responsive web application designed to instantly split large text files into manageable blocks.

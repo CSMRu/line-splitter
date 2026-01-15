@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fontSizeLabel = document.getElementById('font-size-label');
     const lockToggleBtn = document.getElementById('lock-toggle-btn');
     const downloadAllZipBtn = document.getElementById('download-all-zip-btn');
+    const filenameDisplay = document.getElementById('filename-display');
 
     // State
     let currentBlocks = [];
@@ -283,6 +284,11 @@ document.addEventListener('DOMContentLoaded', () => {
             textInput.setSelectionRange(0, 0);
             if (lineNumbers) lineNumbers.scrollTop = 0;
 
+            if (filenameDisplay) {
+                filenameDisplay.textContent = truncateFilename(file.name);
+                filenameDisplay.title = file.name;
+            }
+
             updateLineNumbers(); // Update lines immediately
             triggerSplit();
         };
@@ -292,6 +298,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Real-time Listeners
     textInput.addEventListener('input', () => {
         updateLineNumbers(); // Update on typing
+
+        if (filenameDisplay && filenameDisplay.textContent && filenameDisplay.textContent !== 'Modified') {
+            filenameDisplay.textContent = 'Modified';
+            filenameDisplay.title = '';
+        }
+
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(triggerSplit, 300);
     });
@@ -383,6 +395,11 @@ document.addEventListener('DOMContentLoaded', () => {
         resultCount.textContent = '0 block';
         currentBlocks = [];
         if (downloadAllZipBtn) downloadAllZipBtn.disabled = true;
+
+        if (filenameDisplay) {
+            filenameDisplay.textContent = '';
+            filenameDisplay.title = '';
+        }
     }
     function renderResults(totalLines, blockSize) {
         blocksContainer.innerHTML = '';
@@ -652,6 +669,17 @@ document.addEventListener('DOMContentLoaded', () => {
             .replace(/>/g, "&gt;")
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
+    }
+
+    function truncateFilename(name, maxLength = 30) {
+        if (name.length <= maxLength) return name;
+        // Keep slightly more at the end to preserve extensions
+        const endLength = Math.floor((maxLength - 3) / 2) + 2;
+        const startLength = maxLength - 3 - endLength;
+
+        const start = name.substring(0, startLength);
+        const end = name.substring(name.length - endLength);
+        return `${start}...${end}`;
     }
 
     function showToast(msg) {

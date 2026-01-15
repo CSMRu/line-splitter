@@ -261,6 +261,22 @@ body.light-theme .theme-toggle .moon-icon {
     flex-shrink: 0;
     border-top-left-radius: var(--radius-lg);
     border-top-right-radius: var(--radius-lg);
+    position: relative;
+}
+
+.filename-display {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    max-width: 40%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 0.2s ease;
 }
 
 .panel-header h2 {
